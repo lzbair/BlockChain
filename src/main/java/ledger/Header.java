@@ -5,8 +5,8 @@ public class Header {
     // Indicates which set of block validation rules to follow
     Version version;
 
-    // The hash value of all the transactions in the block.
-    Hash blockHash;
+    // The merkle hash value of all transactions in the block.
+    Hash merkleRootHash;
 
     // Current time as seconds in universal timesince January 1, 1970
     Timestamp timestamp;
