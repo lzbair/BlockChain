@@ -5,8 +5,8 @@ import mining.TransactionPool;
 
 public class App {
 
-    public static void main(String... args){
-        BlockChain blockChain = new BlockChain();
+    public static void main(String... args) {
+        BlockChain blockChain = BlockChain.start();
         TransactionPool pool = new TransactionPool();
 
         while (true) {
