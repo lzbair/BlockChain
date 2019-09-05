@@ -1,7 +1,9 @@
-import ledger.Block;
 import ledger.BlockChain;
-import mining.Miner;
+import ledger.Transaction;
+import mining.MerkleHashTask;
 import mining.TransactionPool;
+
+import java.util.function.Supplier;
 
 public class App {
 
@@ -9,11 +11,29 @@ public class App {
         BlockChain blockChain = BlockChain.start();
         TransactionPool pool = new TransactionPool();
 
-        while (true) {
-            Block newBlock = new Miner().nextBlock(pool);
-            blockChain.append(newBlock);
+        /**
+         while (true) {
+         Block newBlock = new Miner().nextBlock(pool);
+         blockChain.accept(newBlock);
+         }
+         **/
+        Transaction[] txs = new Transaction[10000000];
+        for (int i = 0; i < 10000000; i++) {
+            txs[i] = new Transaction(String.valueOf(i));
         }
 
+        MerkleHashTask task = new MerkleHashTask(txs);
+
+        // timedMain("Fork/Join", () -> task.invoke());
+        timedMain("Sequential", () -> task.digest());
+    }
+
+    static <T> T timedMain(String taskName, Supplier<T> task) {
+        long startTime = System.currentTimeMillis();
+        T value = task.get();
+        long stopTime = System.currentTimeMillis();
+        System.out.println(taskName + ": " + ((stopTime - startTime) / 1000) + " seconds");
+        return value;
     }
 
     private static boolean newMiner(String[] args) {
